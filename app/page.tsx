@@ -6,6 +6,8 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Badge } from "@/components/ui/badge";
 import { CalendarIcon, Clock, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 // Post 型を定義
 interface Post {
