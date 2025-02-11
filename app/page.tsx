@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { CalendarIcon, Clock, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+// Post 型を定義
 interface Post {
   slug: string;
   frontmatter: {
@@ -18,7 +19,8 @@ interface Post {
   };
 }
 
-async function getPosts() {
+// ファイルを取得する非同期関数
+async function getPosts(): Promise<Post[]> {
   const postsDirectory = path.join(process.cwd(), 'app/posts');
   const entries = fs.readdirSync(postsDirectory, { withFileTypes: true });
 
@@ -31,9 +33,18 @@ async function getPosts() {
     const fileContents = fs.readFileSync(filePath, 'utf8');
     const { data: frontmatter } = matter(fileContents);
 
+    // frontmatter のプロパティにデフォルト値を設定
+    const enhancedFrontmatter = {
+      title: frontmatter.title ?? 'Default Title',
+      date: frontmatter.date ?? '1970-01-01',
+      description: frontmatter.description ?? '',
+      tags: frontmatter.tags ?? [],
+      readingTime: frontmatter.readingTime ?? '0 min',
+    };
+
     return {
       slug: filename.replace('.md', ''),
-      frontmatter
+      frontmatter: enhancedFrontmatter
     };
   });
 
@@ -41,7 +52,8 @@ async function getPosts() {
       new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime()
   );
 }
-// 日付のフォーマット関数
+
+// 日付をフォーマットする関数
 function formatDate(date: string) {
   return new Date(date).toLocaleDateString('ja-JP', {
     year: 'numeric',
@@ -110,8 +122,6 @@ export default async function Home() {
               </Card>
           ))}
         </div>
-
       </div>
-
   );
 }

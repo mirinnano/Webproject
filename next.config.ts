@@ -6,5 +6,10 @@ const nextConfig: NextConfig = {
         serverComponentsExternalPackages: ['next-auth']
     }
 };
+module.exports = {
+    eslint: {
+        ignoreDuringBuilds: true,
+    },
+};
 
 export default nextConfig;

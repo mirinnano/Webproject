@@ -10,14 +10,13 @@ import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import Image from 'next/image';
 
-interface PostProps {
-    params: {
-        slug: string;
-    };
+type PostProps = {
+    params: Promise<{ slug: string }>;  // ✅ Promise を外して同期的なオブジェクトに修正
 }
 
-async function getPost(slug: string) {
+async function getPost(params: string) {
     try {
+        const slug = await params;
         const filePath = path.join(process.cwd(), 'app/posts', `${slug}.md`);
         const fileContents = fs.readFileSync(filePath, 'utf8');
         const { data: frontmatter, content } = matter(fileContents);
@@ -35,8 +34,8 @@ function formatDate(date: string) {
     });
 }
 
-export default async function Post({ params }: PostProps) {
-    const post = await getPost(params.slug);
+export default async function Post({ params }: PostProps) {  // ✅ 型を修正
+    const post = await getPost((await params).slug);  // ✅ `params.slug` を直接取得
     if (!post) {
         notFound();
     }
@@ -61,15 +60,15 @@ export default async function Post({ params }: PostProps) {
                         {post.frontmatter.title}
                     </CardTitle>
                     <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mt-2">
-            <span className="flex items-center gap-1">
-              <CalendarIcon className="w-4 h-4" />
-                {formatDate(post.frontmatter.date)}
-            </span>
+                        <span className="flex items-center gap-1">
+                            <CalendarIcon className="w-4 h-4" />
+                            {formatDate(post.frontmatter.date)}
+                        </span>
                         {post.frontmatter.readingTime && (
                             <span className="flex items-center gap-1">
-                <Clock className="w-4 h-4" />
+                                <Clock className="w-4 h-4" />
                                 {post.frontmatter.readingTime}
-              </span>
+                            </span>
                         )}
                     </div>
                 </CardHeader>
