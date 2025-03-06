@@ -6,6 +6,7 @@ import { CalendarIcon, Clock, Eye } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
+
 import Image from 'next/image';
 import UpdateViewCount from "@/app/components/UpdateViewCount";
 
@@ -48,6 +49,7 @@ export default async function Post({ params }: PostProps) {
     }
 
     const toc = await generateToc(post.content);
+
     async function fetchRelatedPosts(tags: string[]) {
         const response = await fetch(`http://localhost:3000/api/related-posts?tags=${tags.join(',')}`);
         if (!response.ok) {
@@ -75,6 +77,7 @@ export default async function Post({ params }: PostProps) {
         });
     }
 
+
     return (
         <>
             <head>
@@ -83,8 +86,6 @@ export default async function Post({ params }: PostProps) {
                         crossOrigin="anonymous"></script>
 
                 <title>{post.frontmatter.title}</title>
-
-                {/* 正しいmetaタグ構文 */}
                 <meta name="description" content={post.frontmatter.description || 'Default description for SEO'}/>
                 <meta property="og:title" content={post.frontmatter.title}/>
                 <meta property="og:description"
@@ -97,9 +98,9 @@ export default async function Post({ params }: PostProps) {
             </head>
 
             <UpdateViewCount slug={(await params).slug}/>
-            <div className="container mx-auto px-4 py-10 flex flex-col gap-8">
+            <div className="flex w-full gap-8 px-4 py-10">
                 {/* 記事コンテンツ */}
-                <div className="w-full article-content">
+                <div className="w-full lg:w-[60.666%] mx-auto flex flex-col gap-8">
                     <Card className="shadow-2xl rounded-2xl overflow-hidden border dark:border-gray-700">
                         <CardHeader className="bg-gray-50 dark:bg-gray-800 px-6 py-4 border-b dark:border-gray-700">
                             <div className="flex flex-wrap gap-2 mb-3">
@@ -131,64 +132,71 @@ export default async function Post({ params }: PostProps) {
                             </div>
                         </CardHeader>
 
-                        <CardContent className="prose dark:prose-invert max-w-none px-6 py-8">
-                            {/* 目次 */}
-                            <div className="toc bg-gray-100 p-4 rounded-lg shadow-md mb-8">
-                                <h2 className="text-2xl font-semibold mb-4 text-center">目次</h2>
-                                <ul className="space-y-2">
-                                    {toc.map((item) => (
-                                        <li key={item.id} className={`pl-${item.level * 2}`}>
-                                            <a href={`#${item.id}`} className="hover:text-gray-900">
-                                                {item.text}
-                                            </a>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-
+                        <CardContent
+                            className="prose dark:prose-invert max-w-none px-6 py-8 flex flex-col lg:flex-row gap-8">
                             {/* 記事内容 */}
-                            <ReactMarkdown
-                                remarkPlugins={[remarkGfm]}
-                                rehypePlugins={[rehypeRaw]}
-                                components={{
-                                    h1: ({node, ...props}) => {
-                                        const children = props.children;
-                                        const id = typeof children === 'string' ? children.toLowerCase().replace(/\s+/g, '-') : '';
-                                        return <h1 className="text-4xl font-bold" id={id} {...props} />;
-                                    },
-                                    h2: ({node, ...props}) => {
-                                        const children = props.children;
-                                        const id = typeof children === 'string' ? children.toLowerCase().replace(/\s+/g, '-') : '';
-                                        return <h2 className="text-3xl font-semibold my-6" id={id} {...props} />;
-                                    },
-                                    h3: ({node, ...props}) => {
-                                        const children = props.children;
-                                        const id = typeof children === 'string' ? children.toLowerCase().replace(/\s+/g, '-') : '';
-                                        return <h3 className="text-2xl font-semibold my-6" id={id} {...props} />;
-                                    },
-                                    h4: ({node, ...props}) => {
-                                        const children = props.children;
-                                        const id = typeof children === 'string' ? children.toLowerCase().replace(/\s+/g, '-') : '';
-                                        return <h3 className="text-xl font-normal my-4" id={id} {...props} />;
-                                    },
-                                    img: ({src, alt}) => (
-                                        <Image
-                                            src={src || ""}
-                                            alt={alt || ''}
-                                            width={500}
-                                            height={550}
-                                            className="rounded-lg shadow-md my-4"
-                                        />
-                                    ),
-                                }}
-                            >
-                                {post.content}
-                            </ReactMarkdown>
+                            <div className="lg:w-3/4 w-full">
+                                <ReactMarkdown
+                                    remarkPlugins={[remarkGfm]}
+                                    rehypePlugins={[rehypeRaw]}
+                                    components={{
+                                        a: ({href, children, ...props}) => (
+                                            <a
+                                                href={href}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-blue-600 hover:underline"
+                                                {...props}
+                                            >
+                                                {children}
+                                            </a>
+                                        ),
+                                        h1: ({node, ...props}) => {
+                                            const children = props.children;
+                                            const id = typeof children === 'string' ? children.toLowerCase().replace(/\s+/g, '-') : '';
+                                            return <h1 className="text-4xl font-bold" id={id} {...props} />;
+                                        },
+                                        h2: ({node, ...props}) => {
+                                            const children = props.children;
+                                            const id = typeof children === 'string' ? children.toLowerCase().replace(/\s+/g, '-') : '';
+                                            return <h2 className="text-3xl font-semibold my-6" id={id} {...props} />;
+                                        },
+                                        h3: ({node, ...props}) => {
+                                            const children = props.children;
+                                            const id = typeof children === 'string' ? children.toLowerCase().replace(/\s+/g, '-') : '';
+                                            return <h3 className="text-2xl font-semibold my-6" id={id} {...props} />;
+                                        },
+                                        h4: ({node, ...props}) => {
+                                            const children = props.children;
+                                            const id = typeof children === 'string' ? children.toLowerCase().replace(/\s+/g, '-') : '';
+                                            return <h4 className="text-xl font-normal my-4" id={id} {...props} />;
+                                        },
+                                        ul: ({node, ...props}) => <ul className="list-disc pl-6" {...props} />,
+                                        ol: ({node, ...props}) => <ol className="list-decimal pl-6" {...props} />,
+                                        li: ({node, ...props}) => <li className="mb-2" {...props} />,
+                                        strong: ({node, ...props}) => <strong className="font-bold" {...props} />,
+                                        em: ({node, ...props}) => <em className="italic" {...props} />,
+                                        blockquote: ({node, ...props}) => <blockquote
+                                            className="border-l-4 pl-4 italic my-4" {...props} />,
+                                        img: ({src, alt}) => (
+                                            <Image
+                                                src={src || ""}
+                                                alt={alt || ''}
+                                                width={500}
+                                                height={550}
+                                                className="rounded-lg shadow-md my-4"
+                                            />
+                                        ),
+                                    }}
+                                >
+                                    {post.content}
+                                </ReactMarkdown>
+                            </div>
                         </CardContent>
                     </Card>
 
-                    {/* ランダム記事 */}
-                    <div className="mt-10">
+                    {/* 次読むべき記事 */}
+                    <div className="mt-8 block lg:hidden">
                         <h3 className="text-2xl font-semibold mb-4">次読むべき記事</h3>
                         <div className="space-y-4">
                             {randomPosts.map((randomPost: any) => (
@@ -207,6 +215,44 @@ export default async function Post({ params }: PostProps) {
                         </div>
                     </div>
                 </div>
+
+                {/* サイドバー */}
+                <div className="w-[30%] flex flex-col gap-8 lg:block hidden">
+                    {/* 目次（TOC） */}
+                    <div className="sticky top-10 bg-gray-100 p-4 rounded-lg shadow-md mb-8">
+                        <h2 className="text-2xl font-semibold mb-4 text-center">目次</h2>
+                        <ul className="space-y-2">
+                            {toc.map((item) => (
+                                <li key={item.id} className={`pl-${item.level * 2}`}>
+                                    <a href={`#${item.id}`} className="hover:text-gray-900">
+                                        {item.text}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* 次読むべき記事 */}
+                    <div className="lg:block sticky top-[calc(12rem+8rem)] z-20">
+                        <h3 className="text-2xl font-semibold mb-4">次読むべき記事</h3>
+                        <div className="space-y-4">
+                            {randomPosts.map((randomPost: any) => (
+                                <Card key={randomPost.slug} className="shadow-md rounded-lg overflow-hidden">
+                                    <CardHeader className="bg-gray-50 dark:bg-gray-800 px-6 py-4">
+                                        <CardTitle
+                                            className="text-xl font-semibold">{randomPost.frontmatter.title}</CardTitle>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <p>{randomPost.frontmatter.excerpt}</p>
+                                        <a href={`/posts/${randomPost.slug}`}
+                                           className="text-blue-600 hover:underline">続きを読む</a>
+                                    </CardContent>
+                                </Card>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </>
     );
