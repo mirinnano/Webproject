@@ -81,10 +81,22 @@ export default async function Post({ params }: PostProps) {
                 <script async
                         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7251276119313924"
                         crossOrigin="anonymous"></script>
-                <title>{post.title}</title>
+
+                <title>{post.frontmatter.title}</title>
+
+                {/* 正しいmetaタグ構文 */}
+                <meta name="description" content={post.frontmatter.description || 'Default description for SEO'}/>
+                <meta property="og:title" content={post.frontmatter.title}/>
+                <meta property="og:description"
+                      content={post.frontmatter.description || 'Default description for SEO'}/>
+                <meta name="twitter:card" content="summary_large_image"/>
+                <meta name="twitter:title" content={post.frontmatter.title}/>
+                <meta name="twitter:description"
+                      content={post.frontmatter.description || 'Default description for SEO'}/>
+                <meta name="twitter:image" content={post.frontmatter.thumbnail || 'default-thumbnail.jpg'}/>
             </head>
 
-            <UpdateViewCount slug={(await params).slug} />
+            <UpdateViewCount slug={(await params).slug}/>
             <div className="container mx-auto px-4 py-10 flex flex-col gap-8">
                 {/* 記事コンテンツ */}
                 <div className="w-full article-content">
@@ -103,17 +115,17 @@ export default async function Post({ params }: PostProps) {
                             </CardTitle>
                             <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mt-2">
                                 <span className="flex items-center gap-1">
-                                    <CalendarIcon className="w-4 h-4" />
+                                    <CalendarIcon className="w-4 h-4"/>
                                     {formatDate(post.frontmatter.date)}
                                 </span>
                                 {post.frontmatter.readingTime && (
                                     <span className="flex items-center gap-1">
-                                        <Clock className="w-4 h-4" />
+                                        <Clock className="w-4 h-4"/>
                                         {post.frontmatter.readingTime}
                                     </span>
                                 )}
                                 <span className="flex items-center gap-1">
-                                    <Eye className="w-4 h-4" />
+                                    <Eye className="w-4 h-4"/>
                                     {post.frontmatter.views} views
                                 </span>
                             </div>
@@ -139,27 +151,27 @@ export default async function Post({ params }: PostProps) {
                                 remarkPlugins={[remarkGfm]}
                                 rehypePlugins={[rehypeRaw]}
                                 components={{
-                                    h1: ({ node, ...props }) => {
+                                    h1: ({node, ...props}) => {
                                         const children = props.children;
                                         const id = typeof children === 'string' ? children.toLowerCase().replace(/\s+/g, '-') : '';
                                         return <h1 className="text-4xl font-bold" id={id} {...props} />;
                                     },
-                                    h2: ({ node, ...props }) => {
+                                    h2: ({node, ...props}) => {
                                         const children = props.children;
                                         const id = typeof children === 'string' ? children.toLowerCase().replace(/\s+/g, '-') : '';
                                         return <h2 className="text-3xl font-semibold my-6" id={id} {...props} />;
                                     },
-                                    h3: ({ node, ...props }) => {
+                                    h3: ({node, ...props}) => {
                                         const children = props.children;
                                         const id = typeof children === 'string' ? children.toLowerCase().replace(/\s+/g, '-') : '';
                                         return <h3 className="text-2xl font-semibold my-6" id={id} {...props} />;
                                     },
-                                    h4: ({ node, ...props }) => {
+                                    h4: ({node, ...props}) => {
                                         const children = props.children;
                                         const id = typeof children === 'string' ? children.toLowerCase().replace(/\s+/g, '-') : '';
                                         return <h3 className="text-xl font-normal my-4" id={id} {...props} />;
                                     },
-                                    img: ({ src, alt }) => (
+                                    img: ({src, alt}) => (
                                         <Image
                                             src={src || ""}
                                             alt={alt || ''}

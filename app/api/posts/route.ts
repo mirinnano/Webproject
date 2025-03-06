@@ -16,13 +16,7 @@ export async function POST(req: Request) {
 
     // SEO対策とOGタグのHTMLを作成
     const seoMetaTags = `
-        <meta name="description" content="${description || 'Default description for SEO'}">
-        <meta property="og:title" content="${title}">
-        <meta property="og:description" content="${description || 'Default description for SEO'}">
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="${title}">
-        <meta name="twitter:description" content="${description || 'Default description for SEO'}">
-        <meta name="twitter:image" content="${thumbnail || 'default-thumbnail.jpg'}">
+      
     `;
 
     // frontmatterの設定
