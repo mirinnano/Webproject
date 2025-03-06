@@ -1,13 +1,33 @@
 "use client";
 
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import { useRouter } from 'next/navigation';
+import {useSession} from "next-auth/react";
 
 export default function AdminDeletePost() {
     const [slug, setSlug] = useState("");
     const [message, setMessage] = useState("");
+    const { data: session, status } = useSession();
     const router = useRouter();
+    const [loading, setLoading] = useState(true);
 
+    useEffect(() => {
+        if (status === 'loading') return;
+        if (!session?.user || session.user.email !== 'admin@admin.com') {
+            router.push('/admin/login');
+        } else {
+            setLoading(false);
+        }
+    }, [session, status, router]);
+
+
+    if (loading) {
+        return (
+            <div className="flex h-screen items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+        );
+    }
     const handleDelete = async (e: React.FormEvent) => {
         e.preventDefault();
 

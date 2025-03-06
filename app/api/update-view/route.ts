@@ -1,31 +1,36 @@
 // app/api/update-view/route.ts
-/* eslint-disable */
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import matter from 'gray-matter';
 
 export async function POST(request: Request) {
     const { slug } = await request.json();
 
-    // JSON ファイルのパス（例：プロジェクト直下の data/views.json）
-    const jsonFilePath = path.join(process.cwd(), 'data', 'views.json');
+    // 投稿ファイルのパス（例：プロジェクト直下の app/posts フォルダ）
+    const postFilePath = path.join(process.cwd(), 'app', 'posts', `${slug}.md`);
 
-    // 既存の view 数データを読み込み
-    let viewsData: { [key: string]: number } = {};
-    if (fs.existsSync(jsonFilePath)) {
-        const fileContent = fs.readFileSync(jsonFilePath, 'utf8');
-        try {
-            viewsData = JSON.parse(fileContent);
-        } catch (err) {
-            viewsData = {};
-        }
+    if (!fs.existsSync(postFilePath)) {
+        return NextResponse.json({ success: false, message: '投稿が見つかりません' }, { status: 404 });
     }
 
-    // 対象の記事の view 数を更新
-    viewsData[slug] = (viewsData[slug] || 0) + 1;
+    // Markdown ファイルを読み込む
+    const fileContents = fs.readFileSync(postFilePath, 'utf8');
 
-    // 更新後のデータを JSON ファイルに書き込み
-    fs.writeFileSync(jsonFilePath, JSON.stringify(viewsData, null, 2), 'utf8');
+    // frontmatter（メタデータ）の取得
+    const { data: frontmatter, content } = matter(fileContents);
 
-    return NextResponse.json({ success: true, views: viewsData[slug] });
+    // views 数を更新
+    const updatedViews = (frontmatter.views || 0) + 1;
+
+    // 新しいフロントマターを作成
+    const updatedFrontmatter = { ...frontmatter, views: updatedViews };
+
+    // 新しい内容をMarkdownに書き戻す
+    const updatedFileContents = matter.stringify(content, updatedFrontmatter);
+
+    // 更新された内容をファイルに書き込む
+    fs.writeFileSync(postFilePath, updatedFileContents, 'utf8');
+
+    return NextResponse.json({ success: true, views: updatedViews });
 }

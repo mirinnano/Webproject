@@ -33,7 +33,7 @@ export default function About() {
     ];
 
     const links = [
-        { icon: <GithubIcon className="w-4 h-4" />, name: "GitHub", url: "https://github.com/yourusername" },
+        { icon: <GithubIcon className="w-4 h-4" />, name: "GitHub", url: "https://github.com/mirinnano" },
         {icon: <TwitterIcon className="w-4 h-4" />, name: "Twitter",url: "https://twitter.com/61233839281" },
         {icon: <SquareUser className="w-4 h-4" />,name:"Discord", url: "https://discordapp.com/users/1122179390403510335"}
     ];

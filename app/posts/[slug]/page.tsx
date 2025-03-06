@@ -1,6 +1,5 @@
 /* eslint-disable */
 import { notFound } from 'next/navigation';
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CalendarIcon, Clock, Eye } from "lucide-react";
@@ -24,15 +23,13 @@ async function fetchPost(slug: string) {
 
 async function generateToc(content: string) {
     const headings = [];
-
-    // Markdown形式の見出し（#、##、###）にマッチする正規表現
     const regex = /^(#{1,3})\s+(.*)$/gm;  // #, ##, ### の見出しにマッチ
     let match;
 
     while ((match = regex.exec(content)) !== null) {
-        const level = match[1].length;  // # の数に基づいて見出しのレベルを決定
-        const text = match[2];  // 見出しのテキスト
-        const id = text.toLowerCase().replace(/\s+/g, '-');  // IDの生成（空白をハイフンに変換）
+        const level = match[1].length;
+        const text = match[2];
+        const id = text.toLowerCase().replace(/\s+/g, '-');
 
         headings.push({
             level,
@@ -45,7 +42,6 @@ async function generateToc(content: string) {
 }
 
 export default async function Post({ params }: PostProps) {
-    // params.slugに基づいてサーバーサイドでデータを取得
     const post = await fetchPost((await params).slug);
     if (!post) {
         notFound();
@@ -68,9 +64,7 @@ export default async function Post({ params }: PostProps) {
         return response.json();
     }
 
-    // タグに基づく関連記事を取得
     const relatedPosts = await fetchRelatedPosts(post.frontmatter.tags);
-    // ランダム関連記事を取得
     const randomPosts = await fetchRandomPosts();
 
     function formatDate(date: string) {
@@ -81,19 +75,19 @@ export default async function Post({ params }: PostProps) {
         });
     }
 
-    // @ts-ignore
     return (
         <>
             <head>
                 <script async
                         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7251276119313924"
                         crossOrigin="anonymous"></script>
+                <title>{post.title}</title>
             </head>
 
-            <UpdateViewCount slug={(await params).slug}/>
-            <div className="container mx-auto px-4 py-10 flex gap-8">
+            <UpdateViewCount slug={(await params).slug} />
+            <div className="container mx-auto px-4 py-10 flex flex-col gap-8">
                 {/* 目次 */}
-                <div className="w-1/5 sticky top-16 max-h-[80vh] overflow-auto ml-auto">
+                <div className="sticky top-16 max-h-[80vh] overflow-auto mb-6 w-full lg:w-1/5 lg:mb-0">
                     <div className="toc bg-gray-100 p-4 rounded-lg shadow-md">
                         <h2 className="text-2xl font-semibold mb-4 text-center">目次</h2>
                         <ul className="space-y-2">
@@ -109,7 +103,7 @@ export default async function Post({ params }: PostProps) {
                 </div>
 
                 {/* 記事コンテンツ */}
-                <div className="w-4/5 article-content">
+                <div className="w-full lg:w-4/5 article-content">
                     <Card className="shadow-2xl rounded-2xl overflow-hidden border dark:border-gray-700">
                         <CardHeader className="bg-gray-50 dark:bg-gray-800 px-6 py-4 border-b dark:border-gray-700">
                             <div className="flex flex-wrap gap-2 mb-3">
@@ -125,17 +119,17 @@ export default async function Post({ params }: PostProps) {
                             </CardTitle>
                             <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mt-2">
                                 <span className="flex items-center gap-1">
-                                    <CalendarIcon className="w-4 h-4"/>
+                                    <CalendarIcon className="w-4 h-4" />
                                     {formatDate(post.frontmatter.date)}
                                 </span>
                                 {post.frontmatter.readingTime && (
                                     <span className="flex items-center gap-1">
-                                        <Clock className="w-4 h-4"/>
+                                        <Clock className="w-4 h-4" />
                                         {post.frontmatter.readingTime}
                                     </span>
                                 )}
                                 <span className="flex items-center gap-1">
-                                    <Eye className="w-4 h-4"/>
+                                    <Eye className="w-4 h-4" />
                                     {post.frontmatter.views} views
                                 </span>
                             </div>
@@ -166,10 +160,7 @@ export default async function Post({ params }: PostProps) {
                                         const id = typeof children === 'string' ? children.toLowerCase().replace(/\s+/g, '-') : '';
                                         return <h3 className="text-xl font-normal my-4" id={id} {...props} />;
                                     },
-
-
-
-                                     img: ({src, alt}) => (
+                                    img: ({ src, alt }) => (
                                         <Image
                                             src={src || "null"}
                                             alt={alt || ''}
@@ -185,12 +176,11 @@ export default async function Post({ params }: PostProps) {
                         </CardContent>
                     </Card>
 
-
                     {/* ランダム記事 */}
                     <div className="mt-10">
                         <h3 className="text-2xl font-semibold mb-4">次読むべき記事</h3>
                         <div className="space-y-4">
-                            {randomPosts.map((randomPost:any) => (
+                            {randomPosts.map((randomPost: any) => (
                                 <Card key={randomPost.slug} className="shadow-md rounded-lg overflow-hidden">
                                     <CardHeader className="bg-gray-50 dark:bg-gray-800 px-6 py-4">
                                         <CardTitle

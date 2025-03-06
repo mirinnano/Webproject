@@ -12,21 +12,29 @@ const handler = NextAuth({
                 password: { label: "Password", type: "password" },
             },
             async authorize(credentials) {
-                // 固定のメールアドレスとパスワードで認証
-                if (
-                    credentials?.email === "admin@admin.com" &&
-                    credentials?.password === "mirin2324"
-                ) {
-                    return { id: "1", name: "Admin", email: "admin@admin.com" };
+                // 環境変数で設定した認証情報を使う
+                const adminEmail = process.env.ADMIN_EMAIL;
+                const adminPassword = process.env.ADMIN_PASSWORD;
+
+                if (!adminEmail || !adminPassword) {
+                    throw new Error("Admin credentials are not set in the environment variables.");
                 }
-                return null;
+
+                // メールアドレスとパスワードを比較
+                if (
+                    credentials?.email === adminEmail &&
+                    credentials?.password === adminPassword
+                ) {
+                    return { id: "1", name: "Admin", email: adminEmail };
+                }
+                return null; // 認証失敗
             },
         }),
     ],
     session: {
         strategy: "jwt",
     },
-    secret: process.env.NEXTAUTH_SECRET, // ランダムな文字列を設定
+    secret: process.env.NEXTAUTH_SECRET, // secretを環境変数で設定
 });
 
 export { handler as GET, handler as POST };
