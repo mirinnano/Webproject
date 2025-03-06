@@ -81,6 +81,7 @@ export default async function Post({ params }: PostProps) {
         });
     }
 
+    // @ts-ignore
     return (
         <>
             <head>
@@ -168,12 +169,12 @@ export default async function Post({ params }: PostProps) {
 
 
 
-                                    img: ({src, alt}) => (
+                                     img: ({src, alt}) => (
                                         <Image
-                                            src={src?.startsWith('/') ? src : `/${src}`}
+                                            src={src || "null"}
                                             alt={alt || ''}
-                                            width={300}
-                                            height={400}
+                                            width={550}
+                                            height={550}
                                             className="rounded-lg shadow-md my-4"
                                         />
                                     ),
