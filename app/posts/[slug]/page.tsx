@@ -161,10 +161,10 @@ export default async function Post({ params }: PostProps) {
                                     },
                                     img: ({ src, alt }) => (
                                         <Image
-                                            src={src?.startsWith('/') ? src : `/${src}`}
+                                            src={src || ""}
                                             alt={alt || ''}
-                                            width={300}
-                                            height={400}
+                                            width={500}
+                                            height={550}
                                             className="rounded-lg shadow-md my-4"
                                         />
                                     ),
