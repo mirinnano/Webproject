@@ -14,6 +14,7 @@ export default function AdminNewPost() {
     const [readingTime, setReadingTime] = useState("");
     const [description, setDescription] = useState("");
     const [content, setContent] = useState("");
+    const [thumbnail, setThumbnail] = useState("");
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -24,7 +25,8 @@ export default function AdminNewPost() {
             tags: tags.split(",").map(tag => tag.trim()),
             readingTime,
             description,
-            content
+            content,
+            thumbnail
         };
 
         const res = await fetch("/api/posts", {
@@ -40,6 +42,7 @@ export default function AdminNewPost() {
             alert("Error creating post");
         }
     };
+
 
     return (
         <div className="max-w-3xl mx-auto p-6">
@@ -82,8 +85,16 @@ export default function AdminNewPost() {
                     onChange={(e) => setDescription(e.target.value)}
                     className="w-full border p-2 rounded"
                 />
+                <input
+                    type="text"
+                    placeholder="サムネイル画像 URL"
+                    value={thumbnail}
+                    onChange={(e) => setThumbnail(e.target.value)}
+                    className="w-full border p-2 rounded"
+                />
+
                 <div>
-                    <SimpleMDE value={content} onChange={setContent} />
+                    <SimpleMDE value={content} onChange={setContent}/>
                 </div>
                 <button
                     type="submit"

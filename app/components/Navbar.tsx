@@ -11,7 +11,9 @@ export default function Navbar() {
         <nav className="bg-gray-900 text-white shadow-md">
             <div className="container mx-auto flex items-center justify-between p-4">
                 {/* サイトタイトル */}
-                <h1 className="text-xl font-bold">常磐華乃を愛するブログ</h1>
+                <Link href="/" className="text-xl font-bold">
+                    びしょげオタクのブログ
+                </Link>
 
                 {/* ハンバーガーメニュー（モバイル用） */}
                 <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>

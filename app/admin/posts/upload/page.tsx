@@ -1,4 +1,5 @@
 // app/admin/posts/new.tsx
+/* eslint-disable */
 'use client';
 
 import { useState } from 'react';
