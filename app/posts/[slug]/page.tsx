@@ -86,20 +86,20 @@ export default async function Post({ params }: PostProps) {
                         crossOrigin="anonymous"></script>
 
                 <title>{post.frontmatter.title}</title>
-                <meta name="description" content={post.frontmatter.description || 'Default description for SEO'}/>
+                <meta name="description" content={post.frontmatter.description || '旅とエロゲ、そして技術の話をします。'}/>
                 <meta property="og:title" content={post.frontmatter.title}/>
                 <meta property="og:description"
-                      content={post.frontmatter.description || 'Default description for SEO'}/>
+                      content={post.frontmatter.description || '旅とエロゲ、そして技術の話をします。'}/>
                 <meta name="twitter:card" content="summary_large_image"/>
                 <meta name="twitter:title" content={post.frontmatter.title}/>
                 <meta name="twitter:description"
-                      content={post.frontmatter.description || 'Default description for SEO'}/>
-                <meta name="twitter:image" content={post.frontmatter.thumbnail || 'default-thumbnail.jpg'}/>
+                      content={post.frontmatter.description || '旅とエロゲ、そして技術の話をします。'}/>
+                <meta name="twitter:image" content={post.frontmatter.thumbnail || ''}/>
             </head>
 
             <UpdateViewCount slug={(await params).slug}/>
             <div className="flex w-full gap-8 px-4 py-10">
-                {/* 記事コンテンツ */}
+                {/* 記事コンテンツ出すやつ2025/03/07 */}
                 <div className="w-full lg:w-[60.666%] mx-auto flex flex-col gap-8">
                     <Card className="shadow-2xl rounded-2xl overflow-hidden border dark:border-gray-700">
                         <CardHeader className="bg-gray-50 dark:bg-gray-800 px-6 py-4 border-b dark:border-gray-700">
