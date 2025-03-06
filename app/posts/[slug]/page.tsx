@@ -86,24 +86,8 @@ export default async function Post({ params }: PostProps) {
 
             <UpdateViewCount slug={(await params).slug} />
             <div className="container mx-auto px-4 py-10 flex flex-col gap-8">
-                {/* 目次 */}
-                <div className="sticky top-16 max-h-[80vh] overflow-auto mb-6 w-full lg:w-1/5 lg:mb-0">
-                    <div className="toc bg-gray-100 p-4 rounded-lg shadow-md">
-                        <h2 className="text-2xl font-semibold mb-4 text-center">目次</h2>
-                        <ul className="space-y-2">
-                            {toc.map((item) => (
-                                <li key={item.id} className={`pl-${item.level * 2}`}>
-                                    <a href={`#${item.id}`} className="hover:text-gray-900">
-                                        {item.text}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
-
                 {/* 記事コンテンツ */}
-                <div className="w-full lg:w-4/5 article-content">
+                <div className="w-full article-content">
                     <Card className="shadow-2xl rounded-2xl overflow-hidden border dark:border-gray-700">
                         <CardHeader className="bg-gray-50 dark:bg-gray-800 px-6 py-4 border-b dark:border-gray-700">
                             <div className="flex flex-wrap gap-2 mb-3">
@@ -136,6 +120,21 @@ export default async function Post({ params }: PostProps) {
                         </CardHeader>
 
                         <CardContent className="prose dark:prose-invert max-w-none px-6 py-8">
+                            {/* 目次 */}
+                            <div className="toc bg-gray-100 p-4 rounded-lg shadow-md mb-8">
+                                <h2 className="text-2xl font-semibold mb-4 text-center">目次</h2>
+                                <ul className="space-y-2">
+                                    {toc.map((item) => (
+                                        <li key={item.id} className={`pl-${item.level * 2}`}>
+                                            <a href={`#${item.id}`} className="hover:text-gray-900">
+                                                {item.text}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+
+                            {/* 記事内容 */}
                             <ReactMarkdown
                                 remarkPlugins={[remarkGfm]}
                                 rehypePlugins={[rehypeRaw]}
@@ -162,10 +161,10 @@ export default async function Post({ params }: PostProps) {
                                     },
                                     img: ({ src, alt }) => (
                                         <Image
-                                            src={src || "null"}
+                                            src={src?.startsWith('/') ? src : `/${src}`}
                                             alt={alt || ''}
-                                            width={550}
-                                            height={550}
+                                            width={300}
+                                            height={400}
                                             className="rounded-lg shadow-md my-4"
                                         />
                                     ),
