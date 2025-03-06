@@ -19,9 +19,7 @@ export async function POST(req: Request) {
         <meta name="description" content="${description || 'Default description for SEO'}">
         <meta property="og:title" content="${title}">
         <meta property="og:description" content="${description || 'Default description for SEO'}">
-     
         <meta name="twitter:card" content="summary_large_image">
-   
         <meta name="twitter:title" content="${title}">
         <meta name="twitter:description" content="${description || 'Default description for SEO'}">
         <meta name="twitter:image" content="${thumbnail || 'default-thumbnail.jpg'}">
@@ -49,7 +47,7 @@ export async function POST(req: Request) {
         // 記事のファイルを作成
         fs.writeFileSync(filePath, fileContent, 'utf8');
         // @ts-ignore
-        
+
         return NextResponse.json({ message: 'Post created successfully', slug });
     } catch (error) {
         console.error('Error creating post:', error);
