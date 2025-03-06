@@ -49,7 +49,7 @@ export async function POST(req: Request) {
         // 記事のファイルを作成
         fs.writeFileSync(filePath, fileContent, 'utf8');
         // @ts-ignore
-        await generateSitemap();
+        
         return NextResponse.json({ message: 'Post created successfully', slug });
     } catch (error) {
         console.error('Error creating post:', error);
