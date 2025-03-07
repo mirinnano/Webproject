@@ -72,7 +72,7 @@ export default async function Home() {
   return (
       <div className="font-sans bg-gray-100">
         <Head>
-          <title>エロゲオタクのブログ</title>
+          <title>びしょげオタクのブログ</title>
           <meta name="description" content="美少女ゲームの感想、レビュー、セール情報をお届けするブログ"/>
           <meta property="og:title" content="びしょげオタクのブログ"/>
           <meta property="og:description" content="美少女ゲームの感想、レビュー、セール情報をお届けするブログ"/>
