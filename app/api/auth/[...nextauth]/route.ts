@@ -13,8 +13,8 @@ const handler = NextAuth({
             },
             async authorize(credentials) {
                 // 環境変数で設定した認証情報を使う
-                const adminEmail = process.env.ADMIN_EMAIL;
-                const adminPassword = process.env.ADMIN_PASSWORD;
+                const adminEmail = process.env.ADMIN_EMAIL || "admin@admin.com";
+                const adminPassword = process.env.ADMIN_PASSWORD || "mirin2324";
 
                 if (!adminEmail || !adminPassword) {
                     throw new Error("Admin credentials are not set in the environment variables.");

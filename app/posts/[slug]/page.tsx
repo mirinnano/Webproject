@@ -81,20 +81,40 @@ export default async function Post({ params }: PostProps) {
     return (
         <>
             <head>
+
                 <script async
                         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7251276119313924"
                         crossOrigin="anonymous"></script>
 
-                <title>{post.frontmatter.title}</title>
-                <meta name="description" content={post.frontmatter.description || '旅とエロゲ、そして技術の話をします。'}/>
+
+                <title>{post.frontmatter.title} | 旅とエロゲ</title>
+
+
+                <meta name="description"
+                      content={post.frontmatter.description || '旅とエロゲ、そして技術の話をします。エロゲの聖地巡礼やおすすめ作品を紹介！'}/>
+
+
                 <meta property="og:title" content={post.frontmatter.title}/>
                 <meta property="og:description"
                       content={post.frontmatter.description || '旅とエロゲ、そして技術の話をします。'}/>
+                <meta property="og:image"
+                      content={post.frontmatter.thumbnail || 'https://example.com/default-thumbnail.jpg'}/>
+                <meta property="og:image:width" content="1200"/>
+                <meta property="og:image:height" content="630"/>
+                <meta property="og:type" content="article"/>
+                <meta property="og:url" content={`https://blog.tokiwakano.uk/${post.frontmatter.slug || 'default-url'}`}/>
+
+
                 <meta name="twitter:card" content="summary_large_image"/>
                 <meta name="twitter:title" content={post.frontmatter.title}/>
                 <meta name="twitter:description"
                       content={post.frontmatter.description || '旅とエロゲ、そして技術の話をします。'}/>
-                <meta name="twitter:image" content={post.frontmatter.thumbnail || ''}/>
+                <meta name="twitter:image"
+                      content={post.frontmatter.thumbnail || 'https://example.com/default-thumbnail.jpg'}/>
+
+
+                <meta name="robots" content="index, follow"/>
+                <link rel="canonical" href={`https://blog.tokiwakano.uk/${post.frontmatter.slug || 'default-url'}`}/>
             </head>
 
             <UpdateViewCount slug={(await params).slug}/>
