@@ -1,6 +1,9 @@
 "use client";
 /* eslint-disable */
+import { metadata } from './metadata';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { GithubIcon, CodeIcon, GamepadIcon, Globe, ExternalLink,TwitterIcon,SquareUser } from "lucide-react";
@@ -53,9 +56,11 @@ export default function About() {
                     </CardHeader>
                     <CardContent>
                         <p className="text-lg text-gray-700 dark:text-gray-300">
-                            わたくしの名は学芸大学です
-                            ゲームとコーディングを愛するデベロッパー(へなちょこ)です。LoLでチームプレイの戦略(レスバ)を楽しみ、
-                            エロゲーで物語に没頭し、そしてコードを書いて新しいものを作ることに情熱を注いでいます。
+                            私は学芸大学と申します。フロントエンド開発を専門とするWebエンジニアです。
+                            React、Next.js、TypeScriptを使ったモダンなWebアプリケーション開発に携わっています。
+                            ゲーム開発にも興味があり、特にチームプレイの戦略性を重視したゲームや、
+                            ストーリー性の強いビジュアルノベルを楽しんでいます。
+                            新しい技術を学び、それを活用してユーザーにとって価値のあるプロダクトを作ることに情熱を注いでいます。
                         </p>
                     </CardContent>
                 </Card>
