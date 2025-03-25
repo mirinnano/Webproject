@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack && next-sitemap --config sitemap.config.js",
-    "build": "next build && next-sitemap --config sitemap.config.js",
-    "start": "next start && next-sitemap --config sitemap.config.js",
+    "build": "next build",
+    "start": "next start",
     "lint": ""
   },
   "dependencies": {
