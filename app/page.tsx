@@ -13,53 +13,76 @@ export const metadata = {
   description: '美少女ゲームの感想、レビュー、セール情報をお届けするブログ',
 };
 
+interface Frontmatter {
+  title: string;
+  date: Date;
+  description?: string;
+  tags?: string[];
+  views: number;
+  thumbnail: string;
+}
+
 interface Post {
   slug: string;
-  frontmatter: {
-    title: string;
-    date: string;
-    description?: string;
-    tags?: string[];
-    views: number;
-    thumbnail?: string;
-  };
+  frontmatter: Frontmatter;
 }
 
-async function getPosts(): Promise<{ allPosts: Post[]; popularPosts: Post[]; tags: string[] }> {
-  const postsDirectory = path.join(process.cwd(), 'app/posts');
-  const entries = fs.readdirSync(postsDirectory, { withFileTypes: true });
-  const files = entries.filter((entry) => entry.isFile() && path.extname(entry.name) === '.md').map((entry) => entry.name);
+interface PostsResponse {
+  allPosts: Post[];
+  popularPosts: Post[];
+  tags: string[];
+}
 
-  const posts = files.map((filename) => {
-    const filePath = path.join(postsDirectory, filename);
-    const fileContents = fs.readFileSync(filePath, 'utf8');
-    const { data: frontmatter } = matter(fileContents);
+async function getPosts(): Promise<PostsResponse> {
+  const postsDirectory = path.join(process.cwd(), 'app/posts');
+
+  try {
+    const entries = await fs.promises.readdir(postsDirectory, { withFileTypes: true });
+    const files = entries
+        .filter((entry) => entry.isFile() && path.extname(entry.name) === '.md')
+        .map((entry) => entry.name);
+
+    const posts = await Promise.all(files.map(async (filename) => {
+      const filePath = path.join(postsDirectory, filename);
+      const fileContents = await fs.promises.readFile(filePath, 'utf8');
+      const { data: frontmatter } = matter(fileContents);
+
+      return {
+        slug: filename.replace('.md', ''),
+        frontmatter: {
+          title: frontmatter.title ?? 'Untitled',
+          date: new Date(frontmatter.date ?? '1970-01-01'),
+          description: frontmatter.description ?? '',
+          tags: frontmatter.tags ?? [],
+          views: frontmatter.views ?? 0,
+          thumbnail: frontmatter.thumbnail ?? '/default-thumbnail.jpg',
+        },
+      };
+    }));
+
+    const popularPosts = posts
+        .sort((a, b) => b.frontmatter.views - a.frontmatter.views)
+        .slice(0, 10);
+
+    const allTags = Array.from(new Set(posts.flatMap((post) => post.frontmatter.tags ?? [])));
 
     return {
-      slug: filename.replace('.md', ''),
-      frontmatter: {
-        title: frontmatter.title ?? 'Untitled',
-        date: frontmatter.date ?? '1970-01-01',
-        description: frontmatter.description ?? '',
-        tags: frontmatter.tags ?? [],
-        views: frontmatter.views ?? 0,
-        thumbnail: frontmatter.thumbnail ?? null,
-      },
+      allPosts: posts.sort((a, b) => b.frontmatter.date.getTime() - a.frontmatter.date.getTime()),
+      popularPosts,
+      tags: allTags,
     };
-  });
-
-  const popularPosts = posts.sort((a, b) => b.frontmatter.views - a.frontmatter.views).slice(0, 10);
-  const allTags = posts.flatMap((post) => post.frontmatter.tags ?? []);
-  const uniqueTags = Array.from(new Set(allTags));
-  return {
-    allPosts: posts.sort((a, b) => new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime()),
-    popularPosts: popularPosts,
-    tags: uniqueTags,
-  };
+  } catch (error) {
+    console.error('Error loading posts:', error);
+    return {
+      allPosts: [],
+      popularPosts: [],
+      tags: [],
+    };
+  }
 }
 
-function formatDate(date: string) {
-  return new Date(date).toLocaleDateString('ja-JP', {
+function formatDate(date: Date) {
+  return date.toLocaleDateString('ja-JP', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -70,15 +93,8 @@ export default async function Home() {
   const { allPosts, popularPosts, tags } = await getPosts();
 
   return (
-      <div className="font-sans bg-gray-100">
+      <div className="font-sans bg-gray-100 min-h-screen">
         <Head>
-          <title>びしょげオタクのブログ</title>
-          <meta name="description" content="美少女ゲームの感想、レビュー、セール情報をお届けするブログ"/>
-          <meta property="og:title" content="びしょげオタクのブログ"/>
-          <meta property="og:description" content="美少女ゲームの感想、レビュー、セール情報をお届けするブログ"/>
-          <meta property="og:image" content="/default-thumbnail.jpg"/>
-          <meta name="twitter:card" content="summary_large_image"/>
-          <meta name="twitter:image" content="/default-thumbnail.jpg"/>
           <title>{metadata.title}</title>
           <meta name="description" content={metadata.description}/>
           <meta name="robots" content="index, follow"/>
@@ -101,108 +117,106 @@ export default async function Home() {
                   crossOrigin="anonymous"></script>
         </Head>
 
-        <main className="max-w-7xl mx-auto px-4 py-8 flex space-x-8">
-          <div className="w-full md:w-2/3 space-y-8">
+        <main className="max-w-7xl mx-auto px-4 py-8 flex flex-col lg:flex-row gap-8">
+          {/* メインコンテンツ */}
+          <div className="w-full lg:w-3/4 space-y-8">
             {/* 最新記事 */}
             <section>
               <h2 className="text-2xl font-bold text-gray-800 mb-6">最新記事</h2>
               {allPosts.slice(0, 2).map((post) => (
-                  <div key={post.slug}
-                       className="bg-white rounded-lg shadow-lg p-6 mb-8 hover:shadow-xl transition-shadow duration-300">
-                    {post.frontmatter.thumbnail && (
-                        <Image
-                            src={post.frontmatter.thumbnail}
-                            alt={post.frontmatter.title}
-                            width={1200}
-                            height={675}
-                            className="rounded-lg object-cover mb-6"
-                            loading="lazy"
-                        />
-                    )}
-                    <div>
+                  <article key={post.slug} className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div className="relative aspect-video">
+                      <Image
+                          src={post.frontmatter.thumbnail}
+                          alt={post.frontmatter.title}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                          className="rounded-t-lg object-cover"
+                          priority={true}
+                      />
+                    </div>
+                    <div className="p-6">
                       <Link href={`/posts/${post.slug}`} legacyBehavior>
-                        <a className="text-3xl font-semibold text-blue-700 hover:text-blue-900 transition-all duration-300">
+                        <a className="text-2xl font-bold text-gray-800 hover:text-blue-600 transition-colors duration-300">
                           {post.frontmatter.title}
                         </a>
                       </Link>
-                      <p className="text-gray-600 mt-4 text-lg">{post.frontmatter.description}</p>
+                      <p className="text-gray-600 mt-3">{post.frontmatter.description}</p>
                       <div className="text-sm text-gray-500 mt-4">{formatDate(post.frontmatter.date)}</div>
                     </div>
-                  </div>
+                  </article>
               ))}
             </section>
-          </div>
 
-          <div className="w-full md:w-2.5/6 space-y-8">
             {/* 他の記事 */}
             <section>
               <h3 className="text-2xl font-bold text-gray-800 mb-6">他の記事</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-                {allPosts.slice(1, 50000).map((post) => (
-                    <div key={post.slug}
-                         className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
-                      {post.frontmatter.thumbnail && (
-                          <Image
-                              src={post.frontmatter.thumbnail}
-                              alt={post.frontmatter.title}
-                              width={400}
-                              height={225}
-                              className="rounded-lg object-cover mb-4"
-                              loading="lazy"
-                          />
-                      )}
-                      <div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {allPosts.slice(2, 7).map((post) => (
+                    <article key={post.slug} className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                      <div className="relative aspect-video">
+                        <Image
+                            src={post.frontmatter.thumbnail}
+                            alt={post.frontmatter.title}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                            className="rounded-t-lg object-cover"
+                            loading="lazy"
+                        />
+                      </div>
+                      <div className="p-4">
                         <Link href={`/posts/${post.slug}`} legacyBehavior>
-                          <a className="text-xl font-semibold text-blue-600 hover:text-blue-800 transition-colors duration-300">
+                          <a className="text-lg font-semibold text-gray-800 hover:text-blue-600 transition-colors duration-300">
                             {post.frontmatter.title}
                           </a>
                         </Link>
                         <p className="text-gray-600 mt-2 text-sm">{post.frontmatter.description}</p>
                         <div className="text-xs text-gray-500 mt-2">{formatDate(post.frontmatter.date)}</div>
-                        <Link href={`/posts/${post.slug}`} legacyBehavior>
-                          <a className="text-blue-600 mt-4 inline-block text-sm hover:underline">続きを読む</a>
-                        </Link>
                       </div>
-                    </div>
+                    </article>
                 ))}
               </div>
             </section>
+          </div>
 
+          {/* サイドバー */}
+          <div className="w-full lg:w-1/4 space-y-8">
+            {/* 人気記事 */}
+            <section className="bg-white p-6 rounded-lg shadow-lg">
+              <h3 className="text-xl font-bold text-gray-800 mb-4">人気記事</h3>
+              <ol className="space-y-2">
+                {popularPosts.map((post, index) => (
+                    <li key={post.slug} className="flex items-center">
+                      <span className="text-gray-500 mr-2">{index + 1}.</span>
+                      <Link href={`/posts/${post.slug}`} legacyBehavior>
+                        <a className="text-gray-700 hover:text-blue-600 transition-colors duration-300">
+                          {post.frontmatter.title}
+                        </a>
+                      </Link>
+                    </li>
+                ))}
+              </ol>
+            </section>
 
-
-          {/* 人気記事 */}
-          <section>
-            <h3 className="text-2xl font-bold border-b pb-2">人気記事</h3>
-            <ol className="space-y-3">
-              {popularPosts.map((post, index) => (
-                  <li key={post.slug} className="flex items-center">
-                    <span className="text-gray-500 mr-2">{index + 1}.</span>
-                    <Link href={`/posts/${post.slug}`} legacyBehavior>
-                      <a className="text-blue-600 hover:underline">{post.frontmatter.title}</a>
+            {/* タグ一覧 */}
+            <section className="bg-white p-6 rounded-lg shadow-lg">
+              <h3 className="text-xl font-bold text-gray-800 mb-4">タグ一覧</h3>
+              <div className="flex flex-wrap gap-2">
+                {tags.map((tag) => (
+                    <Link key={tag} href={`/tags/${tag}`} legacyBehavior>
+                      <a className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm hover:bg-blue-700 transition-colors duration-300">
+                        {tag}
+                      </a>
                     </Link>
-                  </li>
-              ))}
-            </ol>
-          </section>
+                ))}
+              </div>
+            </section>
+          </div>
+        </main>
 
-          {/* タグ一覧 */}
-          <section>
-            <h3 className="text-lg font-bold border-b pb-2">タグ一覧</h3>
-            <div className="flex flex-wrap gap-2">
-              {tags.map((tag) => (
-                  <Link key={tag} href={`/tags/${tag}`} legacyBehavior>
-                    <a className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm hover:bg-blue-800">{tag}</a>
-                  </Link>
-              ))}
-            </div>
-          </section>
+        <footer className="bg-gray-800 text-white text-center py-6 mt-8">
+          <p>&copy; {new Date().getFullYear()} びしょげオタクのブログ. All rights reserved.</p>
+        </footer>
       </div>
-</main>
-
-  <footer className="bg-gray-800 text-white text-center py-6">
-    <p>&copy; {new Date().getFullYear()} びしょげオタクのブログ. All rights reserved.</p>
-  </footer>
-</div>
-)
-  ;
+  );
 }
