@@ -21,7 +21,7 @@ export default function About() {
             name: "ゲーム",
             details: [
                 { name: "League of Legends", type: "MOBA" },
-                { name: "エロゲー", type: "Visual Novel" },
+                { name: "美少女ゲー", type: "Visual Novel" },
 
             ]
         },
@@ -55,7 +55,7 @@ export default function About() {
                         <p className="text-lg text-gray-700 dark:text-gray-300">
                             わたくしの名は学芸大学です
                             ゲームとコーディングを愛するデベロッパー(へなちょこ)です。LoLでチームプレイの戦略(レスバ)を楽しみ、
-                            エロゲーで物語に没頭し、そしてコードを書いて新しいものを作ることに情熱を注いでいます。
+                            美少女ゲームで物語に没頭し、そしてコードを書いて新しいものを作ることに情熱を注いでいます。
                         </p>
                     </CardContent>
                 </Card>

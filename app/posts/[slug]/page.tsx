@@ -87,16 +87,16 @@ export default async function Post({ params }: PostProps) {
                         crossOrigin="anonymous"></script>
 
 
-                <title>{post.frontmatter.title} | 旅とエロゲ</title>
+                <title>{post.frontmatter.title} | 旅とびしょげ</title>
 
 
                 <meta name="description"
-                      content={post.frontmatter.description || '旅とエロゲ、そして技術の話をします。エロゲの聖地巡礼やおすすめ作品を紹介！'}/>
+                      content={post.frontmatter.description || '旅とびしょげ、そして技術の話をします。びしょげの聖地巡礼やおすすめ作品を紹介！'}/>
 
 
                 <meta property="og:title" content={post.frontmatter.title}/>
                 <meta property="og:description"
-                      content={post.frontmatter.description || '旅とエロゲ、そして技術の話をします。'}/>
+                      content={post.frontmatter.description || '旅とびしょげ、そして技術の話をします。'}/>
                 <meta property="og:image"
                       content={post.frontmatter.thumbnail || 'https://example.com/default-thumbnail.jpg'}/>
                 <meta property="og:image:width" content="1200"/>
@@ -108,7 +108,7 @@ export default async function Post({ params }: PostProps) {
                 <meta name="twitter:card" content="summary_large_image"/>
                 <meta name="twitter:title" content={post.frontmatter.title}/>
                 <meta name="twitter:description"
-                      content={post.frontmatter.description || '旅とエロゲ、そして技術の話をします。'}/>
+                      content={post.frontmatter.description || '旅とびしょげ、そして技術の話をします。'}/>
                 <meta name="twitter:image"
                       content={post.frontmatter.thumbnail || 'https://example.com/default-thumbnail.jpg'}/>
 
