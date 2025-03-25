@@ -1,75 +1,62 @@
 "use client";
 
-import {useEffect, useState} from 'react';
-import dynamic from 'next/dynamic';
+import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 
 // SSR を無効にして Markdown エディタを読み込む
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), { ssr: false });
 import "easymde/dist/easymde.min.css";
-import {useSession} from "next-auth/react";
-import {useRouter} from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function AdminNewPost() {
-    const [title, setTitle] = useState(() => {
-        const saved = localStorage.getItem('draft_title');
-        return saved || "";
-    });
-    const [date, setDate] = useState(() => {
-        // JSTに変換 (UTC+9時間)
-        const now = new Date();
-        const jstOffset = 9 * 60; // JSTはUTC+9時間
-        const jstDate = new Date(now.getTime() + jstOffset * 60 * 1000);
-        const saved = localStorage.getItem('draft_date');
-        return saved || jstDate.toISOString().split('T')[0];
-    });
-    const [tags, setTags] = useState(() => {
-        const saved = localStorage.getItem('draft_tags');
-        return saved || "";
-    });
+    const [title, setTitle] = useState("");
+    const [date, setDate] = useState("");
+    const [tags, setTags] = useState("");
     const [suggestedTags] = useState([
         "技術", "ブログ", "Next.js", "TypeScript",
         "React", "JavaScript", "Web開発", "フロントエンド",
         "バックエンド", "デザイン", "UI/UX", "パフォーマンス"
     ]);
-    const [readingTime, setReadingTime] = useState(() => {
-        const saved = localStorage.getItem('draft_readingTime');
-        return saved || "";
-    });
-    const [description, setDescription] = useState(() => {
-        const saved = localStorage.getItem('draft_description');
-        return saved || "";
-    });
-    const [content, setContent] = useState(() => {
-        const saved = localStorage.getItem('draft_content');
-        return saved || "";
-    });
-    const [thumbnail, setThumbnail] = useState(() => {
-        const saved = localStorage.getItem('draft_thumbnail');
-        return saved || "";
-    });
+    const [readingTime, setReadingTime] = useState("");
+    const [description, setDescription] = useState("");
+    const [content, setContent] = useState("");
+    const [thumbnail, setThumbnail] = useState("");
+
     const { data: session, status } = useSession();
     const router = useRouter();
     const [loading, setLoading] = useState(true);
+    const [errors, setErrors] = useState<Record<string, string>>({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
+    // 認証チェック
     useEffect(() => {
-        if (status === 'loading') return;
-        if (!session?.user || session.user.email !== 'admin@admin.com') {
-            router.push('/admin/login');
+        if (status === "loading") return;
+        if (!session?.user || session.user.email !== "admin@admin.com") {
+            router.push("/admin/login");
         } else {
             setLoading(false);
         }
     }, [session, status, router]);
 
-    const [errors, setErrors] = useState<Record<string, string>>({});
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    // client-side で localStorage の値を取得して state を更新
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            setTitle(localStorage.getItem("draft_title") || "");
 
-    if (loading) {
-        return (
-            <div className="flex h-screen items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-            </div>
-        );
-    }
+            // JSTへの変換
+            const now = new Date();
+            const jstOffset = 9 * 60; // JST = UTC+9時間
+            const jstDate = new Date(now.getTime() + jstOffset * 60 * 1000);
+            setDate(localStorage.getItem("draft_date") || jstDate.toISOString().split("T")[0]);
+
+            setTags(localStorage.getItem("draft_tags") || "");
+            setReadingTime(localStorage.getItem("draft_readingTime") || "");
+            setDescription(localStorage.getItem("draft_description") || "");
+            setContent(localStorage.getItem("draft_content") || "");
+            setThumbnail(localStorage.getItem("draft_thumbnail") || "");
+        }
+    }, []);
 
     const validateForm = () => {
         const newErrors: Record<string, string> = {};
@@ -117,10 +104,19 @@ export default function AdminNewPost() {
         }
     };
 
+    if (loading) {
+        return (
+            <div className="flex h-screen items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+        );
+    }
+
     return (
         <div className="max-w-3xl mx-auto p-6">
             <h1 className="text-2xl font-bold mb-4">新規投稿作成</h1>
             <form onSubmit={handleSubmit} className="space-y-4">
+                {/* タイトル */}
                 <div>
                     <label className="block text-sm font-medium mb-1">
                         タイトル <span className="text-red-500">*</span>
@@ -130,14 +126,13 @@ export default function AdminNewPost() {
                         placeholder="記事のタイトルを入力"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        className={`w-full border p-2 rounded ${
-                            errors.title ? "border-red-500" : ""
-                        }`}
+                        className={`w-full border p-2 rounded ${errors.title ? "border-red-500" : ""}`}
                     />
                     {errors.title && (
                         <p className="text-red-500 text-sm mt-1">{errors.title}</p>
                     )}
                 </div>
+                {/* 投稿日 */}
                 <div>
                     <label className="block text-sm font-medium mb-1">
                         投稿日 <span className="text-red-500">*</span>
@@ -146,14 +141,13 @@ export default function AdminNewPost() {
                         type="date"
                         value={date}
                         onChange={(e) => setDate(e.target.value)}
-                        className={`w-full border p-2 rounded ${
-                            errors.date ? "border-red-500" : ""
-                        }`}
+                        className={`w-full border p-2 rounded ${errors.date ? "border-red-500" : ""}`}
                     />
                     {errors.date && (
                         <p className="text-red-500 text-sm mt-1">{errors.date}</p>
                     )}
                 </div>
+                {/* タグ */}
                 <div>
                     <label className="block text-sm font-medium mb-1">
                         タグ (カンマ区切り、最大5つ)
@@ -164,9 +158,7 @@ export default function AdminNewPost() {
                             placeholder="例: 技術,ブログ,Next.js"
                             value={tags}
                             onChange={(e) => setTags(e.target.value)}
-                            className={`w-full border p-2 rounded ${
-                                errors.tags ? "border-red-500" : ""
-                            }`}
+                            className={`w-full border p-2 rounded ${errors.tags ? "border-red-500" : ""}`}
                         />
                         {tags.length === 0 && (
                             <div className="absolute top-full left-0 w-full bg-white border rounded shadow-lg mt-1 z-10">
@@ -190,6 +182,7 @@ export default function AdminNewPost() {
                         <p className="text-red-500 text-sm mt-1">{errors.tags}</p>
                     )}
                 </div>
+                {/* 読了時間 */}
                 <input
                     type="text"
                     placeholder="読了時間 (例: 5分)"
@@ -197,6 +190,7 @@ export default function AdminNewPost() {
                     onChange={(e) => setReadingTime(e.target.value)}
                     className="w-full border p-2 rounded"
                 />
+                {/* 説明文 */}
                 <div>
                     <label className="block text-sm font-medium mb-1">説明文</label>
                     <textarea
@@ -210,6 +204,7 @@ export default function AdminNewPost() {
                         {description.length}/200
                     </p>
                 </div>
+                {/* サムネイル */}
                 <div>
                     <label className="block text-sm font-medium mb-1">
                         サムネイル画像
@@ -229,14 +224,12 @@ export default function AdminNewPost() {
                         画像をアップロード
                     </button>
                 </div>
-
+                {/* 本文 */}
                 <div>
                     <label className="block text-sm font-medium mb-1">
                         本文 <span className="text-red-500">*</span>
                     </label>
-                    <div className={`border rounded ${
-                        errors.content ? "border-red-500" : ""
-                    }`}>
+                    <div className={`border rounded ${errors.content ? "border-red-500" : ""}`}>
                         <SimpleMDE
                             value={content}
                             onChange={setContent}
@@ -281,14 +274,14 @@ export default function AdminNewPost() {
                     <button
                         type="button"
                         onClick={() => {
-                            localStorage.setItem('draft_title', title);
-                            localStorage.setItem('draft_date', date);
-                            localStorage.setItem('draft_tags', tags);
-                            localStorage.setItem('draft_readingTime', readingTime);
-                            localStorage.setItem('draft_description', description);
-                            localStorage.setItem('draft_content', content);
-                            localStorage.setItem('draft_thumbnail', thumbnail);
-                            alert('下書きを保存しました');
+                            localStorage.setItem("draft_title", title);
+                            localStorage.setItem("draft_date", date);
+                            localStorage.setItem("draft_tags", tags);
+                            localStorage.setItem("draft_readingTime", readingTime);
+                            localStorage.setItem("draft_description", description);
+                            localStorage.setItem("draft_content", content);
+                            localStorage.setItem("draft_thumbnail", thumbnail);
+                            alert("下書きを保存しました");
                         }}
                         className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition flex-1"
                     >
