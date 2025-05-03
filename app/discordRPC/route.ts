@@ -1,4 +1,5 @@
 // app/discordRPC/route.ts
+
 export const runtime = 'nodejs'
 
 import { Client, PresenceData} from 'discord.js-selfbot-v13';
