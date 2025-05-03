@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ['next-auth'],
+  serverExternalPackages: ['next-auth',"discord.js-selfbot-v13"],
+  transpilePackages: ['discord.js-selfbot-v13'],
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -33,7 +34,16 @@ const nextConfig: NextConfig = {
         test: /\.node$/,
         use: 'node-loader',
       });
+      
+      config.module.rules.push({
+        test: /Secretbox\.js$/,
+        loader: 'null-loader',
+      });
     }
+    config.ignoreWarnings = [
+      { module: /node_modules\/discord\.js-selfbot-v13/ },
+      { message: /Critical dependency: the request of a dependency is an expression/ }
+    ];
 
     return config;
   },
