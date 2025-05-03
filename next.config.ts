@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   serverExternalPackages: ['next-auth',"discord.js-selfbot-v13"],
-  transpilePackages: ['discord.js-selfbot-v13'],
+  
   eslint: {
     ignoreDuringBuilds: true,
   },
