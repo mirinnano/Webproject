@@ -26,6 +26,17 @@ const nextConfig: NextConfig = {
       }
     ]
   },
+  webpack: (config, { isServer }) => {
+    // サーバーサイドビルド時のみ.nodeファイルを処理
+    if (isServer) {
+      config.module.rules.push({
+        test: /\.node$/,
+        use: 'node-loader',
+      });
+    }
+
+    return config;
+  },
   async headers() {
     return [
       {
