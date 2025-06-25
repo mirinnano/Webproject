@@ -1,3 +1,4 @@
+// tsconfig.json
 {
   "compilerOptions": {
     "target": "ES2017",
@@ -14,14 +15,27 @@
     "jsx": "preserve",
     "incremental": true,
     "plugins": [
-      {
-        "name": "next"
-      }
+      { "name": "next" }
     ],
+
+    // ここから追加設定
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      // app 以下の全ファイルを @/* で参照
+      "@/*": ["app/*"],
+
+      // ルート直下の lib フォルダを @/lib/* で参照
+      "@/lib/*": ["lib/*"]
     }
+    // ここまで
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

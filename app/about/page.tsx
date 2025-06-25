@@ -1,145 +1,103 @@
-"use client";
-/* eslint-disable */
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { GithubIcon, CodeIcon, GamepadIcon, Globe, ExternalLink,TwitterIcon,SquareUser } from "lucide-react";
+'use client';
 
-export default function About() {
-    const skills = [
-        "JavaScript",
-        "TypeScript",
-        "React",
-        "Next.js",
-        "Rust",
-        "Go"
-    ];
+import Image from 'next/image'; // ← この行を追加しました
+import { AnimateOnScroll } from "@/components/animation/AnimateOnScroll";
+import { Users, Scale, Bomb } from "lucide-react";
 
-    const hobbies = [
-        {
-            icon: <GamepadIcon className="w-4 h-4" />,
-            name: "ゲーム",
-            details: [
-                { name: "League of Legends", type: "MOBA" },
-                { name: "美少女ゲー", type: "Visual Novel" },
+export default function AboutPage() {
+  const principles = [
+    {
+      icon: <Users className="h-8 w-8 text-pink-400" />,
+      title: "多様性の尊重",
+      description: "趣味、年齢、所属、思想など、あらゆるバックグラウンドを持つメンバーが共存しています。互いの違いを理解し、尊重することがロメダの基本です。"
+    },
+    {
+      icon: <Scale className="h-8 w-8 text-sky-400" />,
+      title: "最大限の自由",
+      description: "言論と表現の自由を最大限に確保します。ただし、それは他者を無差別に傷つける自由ではありません。建設的なカオスを目指します。"
+    },
+    {
+      icon: <Bomb className="h-8 w-8 text-emerald-400" />,
+      title: "破壊と創造",
+      description: "常識や固定観念に挑戦し、新しい価値観や文化を創造することを楽しむ精神を歓迎します。ここは、はみ出し者たちのためのユートピアです。"
+    }
+  ];
 
-            ]
-        },
-        {
-            icon: <CodeIcon className="w-4 h-4" />,
-            name: "プログラミング",
-            details: ["Web開発", "アプリ開発"]
-        }
-    ];
-
-    const links = [
-        { icon: <GithubIcon className="w-4 h-4" />, name: "GitHub", url: "https://github.com/mirinnano" },
-        {icon: <TwitterIcon className="w-4 h-4" />, name: "Twitter",url: "https://twitter.com/61233839281" },
-        {icon: <SquareUser className="w-4 h-4" />,name:"Discord", url: "https://discordapp.com/users/1122179390403510335"}
-    ];
-
-    return (
-        <div className="max-w-3xl mx-auto p-6">
-            <h1 className="text-4xl font-bold mb-8 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                About Me
+  return (
+    <div className="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+      <AnimateOnScroll>
+        <div className="relative bg-gray-800 py-24 sm:py-32">
+          <div className="absolute inset-0">
+            <Image
+              src="/hero-background.jpg" // トップページと同じ背景画像を流用
+              alt="Background"
+              fill
+              className="object-cover opacity-20"
+            />
+          </div>
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+              ロメダ論
             </h1>
-
-            <div className="grid gap-6">
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <span className="text-2xl">自己紹介</span>
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-lg text-gray-700 dark:text-gray-300">
-                            わたくしの名は学芸大学です
-                            ゲームとコーディングを愛するデベロッパー(へなちょこ)です。LoLでチームプレイの戦略(レスバ)を楽しみ、
-                            美少女ゲームで物語に没頭し、そしてコードを書いて新しいものを作ることに情熱を注いでいます。
-                        </p>
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <span className="text-2xl">趣味</span>
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="grid gap-4">
-                            {hobbies.map((hobby) => (
-                                <div key={hobby.name} className="space-y-2">
-                                    <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2">
-                                        {hobby.icon}
-                                        <span className="font-medium">{hobby.name}</span>
-                                    </div>
-                                    <div className="ml-6">
-                                        {Array.isArray(hobby.details) ? (
-                                            <div className="flex flex-wrap gap-2">
-                                                {hobby.details.map((detail, index) => (
-                                                    typeof detail === 'string' ? (
-                                                        <Badge key={index} variant="secondary">
-                                                            {detail}
-                                                        </Badge>
-                                                    ) : (
-                                                        <Badge key={detail.name} variant="secondary" className="flex items-center gap-1">
-                                                            {detail.name}
-                                                            <span className="text-xs opacity-70">({detail.type})</span>
-                                                        </Badge>
-                                                    )
-                                                ))}
-                                            </div>
-                                        ) : null}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <span className="text-2xl">Links</span>
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="flex flex-wrap gap-3">
-                            {links.map((link) => (
-                                <Button
-                                    key={link.name}
-                                    variant="outline"
-                                    size="sm"
-                                    className="gap-2"
-                                    onClick={() => window.open(link.url, '_blank')}
-                                >
-                                    {link.icon}
-                                    {link.name}
-                                    <ExternalLink className="w-3 h-3" />
-                                </Button>
-                            ))}
-                        </div>
-                    </CardContent>
-                </Card>
-
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <span className="text-2xl">スキル</span>
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="flex flex-wrap gap-2">
-                            {skills.map((skill) => (
-                                <Badge key={skill} variant="secondary" className="text-sm">
-                                    {skill}
-                                </Badge>
-                            ))}
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
+            <p className="mt-6 max-w-3xl mx-auto text-xl text-gray-300">
+              底辺による底辺のためのユートピア、その理念と哲学。
+            </p>
+          </div>
         </div>
-    );
+      </AnimateOnScroll>
+
+      <div className="relative py-16 sm:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          {/* 設立経緯セクション */}
+          <AnimateOnScroll>
+            <div className="max-w-3xl mx-auto text-lg leading-8">
+              <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-3xl">
+                設立経緯
+              </h2>
+              <p className="mt-6">
+                ROMEDAは、2018年2月25日に当時YouTubeの動画投稿者として活動していた <strong className="font-semibold text-purple-500">れおうーん（みゆき）</strong> によって、設立されました。
+              </p>
+              <p className="mt-4">
+                特定の界隈に依存せず、多様なバックグラウンドを持つメンバーが集まる「るつぼ」のような場所を目指してスタートしました。私たちは、既存のコミュニティに馴染めなかった「はみ出し者」たちが、自分らしくいられる最後の砦となることを目指しています。
+              </p>
+            </div>
+          </AnimateOnScroll>
+
+          {/* 行動指針セクション */}
+          <div className="mt-20">
+            <AnimateOnScroll>
+              <div className="text-center">
+                <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-3xl">
+                  行動指針
+                </h2>
+                <p className="mt-4 text-lg leading-8 text-gray-600 dark:text-gray-400">
+                  ロメダが目指す「建設的なカオス」を維持するための3つの柱。
+                </p>
+              </div>
+            </AnimateOnScroll>
+            <div className="mt-12 grid max-w-xl mx-auto gap-8 lg:max-w-none lg:grid-cols-3">
+              {principles.map((principle, index) => (
+                <AnimateOnScroll key={principle.title} delay={index * 150}>
+                  <div className="flex flex-col p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-lg h-full">
+                    <div className="flex-shrink-0">
+                      <div className="flex items-center justify-center h-12 w-12 rounded-md bg-purple-100 dark:bg-purple-900/50 text-white">
+                        {principle.icon}
+                      </div>
+                    </div>
+                    <div className="mt-6">
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-white">{principle.title}</h3>
+                      <p className="mt-4 text-base text-gray-600 dark:text-gray-400">
+                        {principle.description}
+                      </p>
+                    </div>
+                  </div>
+                </AnimateOnScroll>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
