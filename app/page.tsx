@@ -136,7 +136,7 @@ const communityFeatures = [
             </AnimateOnScroll>
             <AnimateOnScroll delay={400}>
               <div className="mt-10 flex justify-center gap-4">
-                <a href="[ここにDiscord招待URLを貼る]" target="_blank" rel="noopener noreferrer">
+                <a href="https://discord.gg/bSAgveD9Ru" target="_blank" rel="noopener noreferrer">
                   <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white font-bold text-lg shadow-lg transform hover:scale-105 transition-transform duration-300 ease-in-out">
                     <Rocket className="mr-2 h-5 w-5" />
                     今すぐ参加する
@@ -147,7 +147,7 @@ const communityFeatures = [
           </div>
         </section>
 
-        {/* --- What is &Romeda? セクション --- */}
+        {/* --- What is Romeda? セクション --- */}
         <section className="py-20 bg-gray-50 dark:bg-gray-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <AnimateOnScroll>
@@ -165,7 +165,7 @@ const communityFeatures = [
               </div>
             </AnimateOnScroll>
             
-            <div className="mt-16 grid gap-10 md:grid-cols-3">
+            <div className="mt-16 grid gap-10 md:grid-cols-2 lg:grid-cols-4">
               {communityFeatures.map((feature, index) => (
                 <AnimateOnScroll key={feature.title} delay={index * 150}>
                   <div className="text-center p-8 bg-white dark:bg-gray-900 rounded-2xl shadow-lg h-full transform hover:-translate-y-2 transition-transform duration-300">
@@ -178,6 +178,33 @@ const communityFeatures = [
                 </AnimateOnScroll>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* --- 紹介動画セクション --- */}
+        <section className="py-20 bg-gray-900">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <AnimateOnScroll>
+              <div className="text-center mb-12">
+                <h2 className="text-3xl font-bold text-white">ロメダを覗いてみる</h2>
+                <p className="mt-4 text-lg text-gray-400">百聞は一見に如かず。動画で私たちの雰囲気を感じてください。</p>
+              </div>
+            </AnimateOnScroll>
+            <AnimateOnScroll delay={200}>
+              <div className="max-w-4xl mx-auto">
+                <div className="aspect-video rounded-2xl shadow-2xl overflow-hidden border-4 border-gray-800">
+                  <iframe 
+                    width="100%" 
+                    height="100%" 
+                    src="https://www.youtube.com/embed/jSE3XiTRrJk" 
+                    title="YouTube video player" 
+                    frameBorder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              </div>
+            </AnimateOnScroll>
           </div>
         </section>
 
@@ -238,7 +265,7 @@ const communityFeatures = [
                         </span>
                     </h2>
                     <a
-                        href="[ここにDiscord招待URLを再度貼る]"
+                        href="https://discord.gg/bSAgveD9Ru"
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="mt-8 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 sm:w-auto transition-transform transform hover:scale-105"
