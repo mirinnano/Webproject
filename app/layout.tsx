@@ -1,99 +1,43 @@
-// app/layout.tsx
 import './globals.css'
 import type { Metadata, Viewport } from 'next'
 import { Poppins } from 'next/font/google'
 import { ReactNode } from 'react'
 import Navbar from './components/Navbar'
 import Providers from './providers'
+import { Footer } from './components/layout/Footer'; // --- [追加] ---
 
-// Google Fonts の設定
 const poppins = Poppins({
-  subsets: ['latin'],
   weight: ['400', '600', '700', '800'],
+  subsets: ['latin'],
   display: 'swap',
-})
+});
 
-// サイトの基本 URL (環境変数が無ければデフォルト)
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://romeda.tokiwakano.uk'
-
-// ページ共通のメタデータ
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL('https://romeda.tokiwakano.uk'),
   title: {
-    default: 'Romeda | カオスでアクティブな雑談サーバー',
-    template: '%s | Romeda',
+    default: 'ロメダ (Romeda) | 公式サイト',
+    template: '%s | ロメダ (Romeda)',
   },
-  description:
-    'カオスでアクティブな雑談サーバー「ロメダ」。ゲーム、クリエイティブ、テクノロジー。全てが交差する、はみ出し者たちのユートピアへようこそ。',
-  keywords: [
-    'Discord',
-    'コミュニティ',
-    'ゲーム',
-    '雑談',
-    'プログラミング',
-    'VALORANT',
-    'LoL',
-    'Romeda',
-    'ロメダ',
-    '株',
-    'カオス',
-    'アクティブ',
-    '雑談サーバー',
-    'ユートピア',
-    'はみ出し者',
-  ],
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
+  description: 'カオスでアクティブな雑談サーバー「ロメダ」。ゲーム、クリエイティブ、テクノロジー。全てが交差する、はみ出し者たちのユートピアへようこそ。',
   openGraph: {
-    title: 'Romeda | カオスでアクティブな雑談サーバー',
-    description:
-      'ゲーム、クリエイティブ、テクノロジー。全てが交差するユートピアへようこそ。',
-    url: siteUrl,
-    siteName: 'Romeda',
-    images: [
-      {
-        url: "https://cdn.discordapp.com/attachments/1369627467991486605/1387296051949605005/image.png?ex=685cd3a1&is=685b8221&hm=a93b7e944f4c894851bfbe2f81540c10737716b90e910e80df331b14c2d9141b&",
-        width: 1200,
-        height: 630,
-        alt: 'Romeda Community Logo',
-      },
-    ],
+    title: 'ロメダ (Romeda) | 公式サイト',
+    description: 'カオスでアクティブな雑談サーバー「ロメダ」。ゲーム、クリエイティブ、テクノロジー。全てが交差する、はみ出し者たちのユートピアへようこそ。',
+    url: 'https://romeda.tokiwakano.uk',
+    siteName: 'ロメダ (Romeda)',
     locale: 'ja_JP',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Romeda | カオスでアクティブな雑談サーバー',
-    description:
-      'カオスでアクティブな雑談サーバー「ロメダ」。ゲーム、クリエイティブ、テクノロジー。全てが交差する、はみ出し者たちのユートピアへようこそ。',
-    images: ['/hero-background.jpg'],
-    creator: '@あなたのTwitterID',
-  },
-  alternates: {
-    canonical: '/',
-  },
-  icons: {
-    icon: '/favicon.ico', // 基本のファビコン
-    shortcut: '/favicon.ico', // ショートカットアイコン
-    apple: '/apple-touch-icon.png', // Appleデバイス用のアイコン (別途作成推奨)
+    title: 'ロメダ (Romeda) | 公式サイト',
+    description: 'カオスでアクティブな雑談サーバー「ロメダ」。ゲーム、クリエイティブ、テクノロジー。全てが交差する、はみ出し者たちのユートピアへようこそ。',
+    site: '@61233839281', 
+    creator: '@61233839281',
   },
 }
 
-// ビューポート設定 (Next.js が自動で `<meta>` を挿入)
 export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 1,
-  themeColor: '#111827',
+  themeColor: '#8B5CF6',
 }
 
 export default function RootLayout({
@@ -103,10 +47,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja" className={poppins.className}>
-      <body>
+      <body className="flex flex-col min-h-screen bg-gray-900"> {/* --- [変更] --- */}
         <Providers>
           <Navbar />
-          <main>{children}</main>
+          <main className="flex-grow">{children}</main> {/* --- [変更] --- */}
+          <Footer /> {/* --- [追加] --- */}
         </Providers>
       </body>
     </html>

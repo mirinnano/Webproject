@@ -20,6 +20,7 @@ export default function Navbar() {
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/about", label: "About" },
+    { href: "/management", label: "Management" }, // --- [変更] ---
     { href: "/announcements", label: "Announcements" },
     { href: "https://discord.gg/bSAgveD9Ru", label: "Join Discord", isExternal: true },
   ];
@@ -103,9 +104,24 @@ export default function Navbar() {
           <div className="flex flex-col items-center justify-center flex-grow gap-6">
             {navLinks.map((link) => (
               link.isExternal ? (
-                <a key={link.label} href={link.href} /* ... */ >{link.label}</a>
+                <a 
+                  key={link.label} 
+                  href={link.href} 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-2xl font-bold text-gray-200 hover:text-white transition-colors"
+                >
+                  {link.label}
+                </a>
               ) : (
-                <Link key={link.label} href={link.href} onClick={() => setIsOpen(false)} /* ... */ >{link.label}</Link>
+                <Link 
+                  key={link.label} 
+                  href={link.href} 
+                  onClick={() => setIsOpen(false)} 
+                  className="text-2xl font-bold text-gray-200 hover:text-white transition-colors"
+                >
+                  {link.label}
+                </Link>
               )
             ))}
           </div>

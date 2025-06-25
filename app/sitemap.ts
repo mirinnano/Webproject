@@ -71,6 +71,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const staticPaths = [
         { url: `${baseURL}`, lastModified: _lastModified },
         { url: `${baseURL}/about`, lastModified: _lastModified },
+        { url: `${baseURL}/management`, lastModified: _lastModified }, // --- [追加] ---
+        { url: `${baseURL}/privacy-policy`, lastModified: _lastModified }, // --- [追加] ---
+        { url: `${baseURL}/disclaimer`, lastModified: _lastModified }, // --- [追加] ---
        
     ];
 
