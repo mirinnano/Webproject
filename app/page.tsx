@@ -1,11 +1,9 @@
-import Link from 'next/link';
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
-import Image from 'next/image';
+
+
+
 import Head from 'next/head';
 import { Button } from "@/components/ui/button";
-import { Card,  CardTitle } from "@/components/ui/card";
+
 import { Users, Rocket, Gamepad2, Code, Music,Paintbrush } from 'lucide-react';
 import { AnimateOnScroll } from '@/components/animation/AnimateOnScroll';
 
@@ -18,58 +16,17 @@ export const metadata = {
 };
 
 // --- データ構造の定義 ---
-interface Frontmatter {
-  title: string;
-  date: Date;
-  description?: string;
-  tags?: string[];
-  views: number;
-  thumbnail: string;
-}
 
-interface Post {
-  slug: string;
-  frontmatter: Frontmatter;
-}
+
 
 // --- お知らせ取得関数 ---
-async function getAnnouncements(): Promise<Post[]> {
-  const postsDirectory = path.join(process.cwd(), 'app/posts');
-  try {
-    const files = fs.readdirSync(postsDirectory).filter(file => file.endsWith('.md'));
-    const posts = files.map(filename => {
-      const filePath = path.join(postsDirectory, filename);
-      const fileContents = fs.readFileSync(filePath, 'utf8');
-      const { data: frontmatter } = matter(fileContents);
-      return {
-        slug: filename.replace('.md', ''),
-        frontmatter: {
-          title: frontmatter.title ?? 'Untitled',
-          date: new Date(frontmatter.date ?? '1970-01-01'),
-          description: frontmatter.description ?? '',
-          tags: frontmatter.tags ?? [],
-          views: frontmatter.views ?? 0,
-          thumbnail: frontmatter.thumbnail ?? '/default-thumbnail.jpg',
-        },
-      };
-    });
-    return posts.sort((a, b) => b.frontmatter.date.getTime() - a.frontmatter.date.getTime());
-  } catch (error) {
-    console.error('Error loading posts for announcements:', error);
-    return [];
-  }
-}
 
-// --- 日付フォーマット関数 ---
-function formatDate(date: Date) {
-  return new Date(date).toLocaleDateString('ja-JP', {
-    year: 'numeric', month: 'long', day: 'numeric',
-  });
-}
+
+
 
 // --- メインコンポーネント ---
 export default async function HomePage() {
-  const announcements = (await getAnnouncements()).slice(0, 3);
+  
 
 const communityFeatures = [
     {
@@ -208,51 +165,6 @@ const communityFeatures = [
           </div>
         </section>
 
-        {/* --- お知らせセクション --- */}
-        {announcements.length > 0 && (
-          <section className="py-20 bg-white dark:bg-gray-900">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <AnimateOnScroll>
-                <div className="text-center mb-12">
-                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Announcements</h2>
-                  <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">コミュニティの最新情報をお届けします。</p>
-                </div>
-              </AnimateOnScroll>
-              <div className="grid gap-8 lg:grid-cols-3">
-                {announcements.map((post, index) => (
-                  <AnimateOnScroll key={post.slug} delay={index * 150}>
-                    <Card className="bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-md hover:shadow-xl transition-shadow rounded-2xl overflow-hidden h-full flex flex-col">
-                      <Link href={`/posts/${post.slug}`} className="block">
-                        <div className="relative h-48 w-full">
-                          <Image
-                            src={post.frontmatter.thumbnail}
-                            alt={post.frontmatter.title}
-                            fill
-                            sizes="(max-width: 1024px) 100vw, 33vw"
-                            className="object-cover"
-                          />
-                        </div>
-                      </Link>
-                      <div className="p-6 flex flex-col flex-grow">
-                          <CardTitle className="text-xl font-bold hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
-                            <Link href={`/posts/${post.slug}`}>
-                              {post.frontmatter.title}
-                            </Link>
-                          </CardTitle>
-                          <p className="mt-2 text-gray-600 dark:text-gray-400 text-sm flex-grow">
-                            {post.frontmatter.description}
-                          </p>
-                          <div className="mt-4 text-xs text-gray-500 dark:text-gray-500">
-                            {formatDate(post.frontmatter.date)}
-                          </div>
-                      </div>
-                    </Card>
-                  </AnimateOnScroll>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
         
         {/* --- 最終CTAセクション --- */}
         <section className="bg-gray-800">

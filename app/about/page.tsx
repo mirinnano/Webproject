@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image'; // ← この行を追加しました
+import Image from 'next/image';
 import { AnimateOnScroll } from "@/components/animation/AnimateOnScroll";
 import { Users, Scale, Bomb } from "lucide-react";
 
@@ -29,7 +29,7 @@ export default function AboutPage() {
         <div className="relative bg-gray-800 py-24 sm:py-32">
           <div className="absolute inset-0">
             <Image
-              src="/hero-background.jpg" // トップページと同じ背景画像を流用
+              src="/hero-background.jpg"
               alt="Background"
               fill
               className="object-cover opacity-20"
@@ -49,14 +49,13 @@ export default function AboutPage() {
       <div className="relative py-16 sm:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          {/* 設立経緯セクション */}
           <AnimateOnScroll>
             <div className="max-w-3xl mx-auto text-lg leading-8">
               <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-3xl">
                 設立経緯
               </h2>
               <p className="mt-6">
-                ROMEDAは、2018年2月25日に当時YouTubeの動画投稿者として活動していた <strong className="font-semibold text-purple-500">れおうーん（みゆき）</strong> によって、設立されました。
+                ROMEDAは、2024年2月23日にDiscordの既存サーバーからの移住によって設立されました。創設者は <strong className="font-semibold text-purple-500">れおうーん（みゆき）</strong> です。
               </p>
               <p className="mt-4">
                 特定の界隈に依存せず、多様なバックグラウンドを持つメンバーが集まる「るつぼ」のような場所を目指してスタートしました。私たちは、既存のコミュニティに馴染めなかった「はみ出し者」たちが、自分らしくいられる最後の砦となることを目指しています。
@@ -64,7 +63,6 @@ export default function AboutPage() {
             </div>
           </AnimateOnScroll>
 
-          {/* 行動指針セクション */}
           <div className="mt-20">
             <AnimateOnScroll>
               <div className="text-center">
