@@ -61,7 +61,7 @@ export const metadata: Metadata = {
     siteName: 'Romeda',
     images: [
       {
-        url: '/andromeda-og-image.jpg',
+        url: "https://cdn.discordapp.com/attachments/1369627467991486605/1387296051949605005/image.png?ex=685cd3a1&is=685b8221&hm=a93b7e944f4c894851bfbe2f81540c10737716b90e910e80df331b14c2d9141b&",
         width: 1200,
         height: 630,
         alt: 'Romeda Community Logo',
@@ -75,11 +75,16 @@ export const metadata: Metadata = {
     title: 'Romeda | カオスでアクティブな雑談サーバー',
     description:
       'カオスでアクティブな雑談サーバー「ロメダ」。ゲーム、クリエイティブ、テクノロジー。全てが交差する、はみ出し者たちのユートピアへようこそ。',
-    images: ['/andromeda-og-image.jpg'],
+    images: ['/hero-background.jpg'],
     creator: '@あなたのTwitterID',
   },
   alternates: {
     canonical: '/',
+  },
+  icons: {
+    icon: '/favicon.ico', // 基本のファビコン
+    shortcut: '/favicon.ico', // ショートカットアイコン
+    apple: '/apple-touch-icon.png', // Appleデバイス用のアイコン (別途作成推奨)
   },
 }
 

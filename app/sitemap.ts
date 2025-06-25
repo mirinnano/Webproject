@@ -51,7 +51,7 @@ async function getArticlesFromFileSystem(): Promise<Article[]> {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const baseURL = process.env.NEXT_PUBLIC_URL || 'https://blog.tokiwakano.uk'; // 環境変数から取得する（URLを変更可能）
+    const baseURL = process.env.NEXT_PUBLIC_URL || 'https://romeda.tokiwakano.uk'; // 環境変数から取得する（URLを変更可能）
     const _lastModified = new Date();
 
     // 投稿記事一覧を取得
@@ -71,7 +71,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const staticPaths = [
         { url: `${baseURL}`, lastModified: _lastModified },
         { url: `${baseURL}/about`, lastModified: _lastModified },
-        { url: `${baseURL}/disclaimer`, lastModified: _lastModified },
+       
     ];
 
     // 投稿記事のURL（動的ページ）
