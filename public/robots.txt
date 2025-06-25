@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: /admin/
 Allow: /
-Sitemap: https://blog.tokiwakano.uk/sitemap.xml
+Sitemap: https://romeda.tokiwakano.uk/sitemap.xml
