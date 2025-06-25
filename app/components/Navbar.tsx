@@ -21,7 +21,7 @@ export default function Navbar() {
     { href: "/", label: "Home" },
     { href: "/about", label: "About" },
     { href: "/announcements", label: "Announcements" },
-    { href: "[ここにDiscord招待URL]", label: "Join Discord", isExternal: true },
+    { href: "https://discord.gg/bSAgveD9Ru", label: "Join Discord", isExternal: true },
   ];
 
   return (
