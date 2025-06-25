@@ -55,7 +55,7 @@ export default function AboutPage() {
                 設立経緯
               </h2>
               <p className="mt-6">
-                ROMEDAは、2024年2月23日にDiscordの既存サーバーからの移住によって設立されました。創設者は <strong className="font-semibold text-purple-500">れおうーん（みゆき）</strong> です。
+                ROMEDAは、2018年2月25日、当時YouTubeの動画投稿者として活動していた <strong className="font-semibold text-purple-500">れおうーん（みゆき）</strong> によって、創設されました。
               </p>
               <p className="mt-4">
                 特定の界隈に依存せず、多様なバックグラウンドを持つメンバーが集まる「るつぼ」のような場所を目指してスタートしました。私たちは、既存のコミュニティに馴染めなかった「はみ出し者」たちが、自分らしくいられる最後の砦となることを目指しています。
