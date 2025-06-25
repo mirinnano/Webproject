@@ -73,11 +73,11 @@ const communityFeatures = [
         {/* --- ヒーローセクション --- */}
         <section className="relative text-center py-28 md:py-40 bg-gray-900 text-white overflow-hidden">
           <div 
-            className="absolute inset-0 bg-cover bg-center opacity-20" 
+            className="absolute inset-0 bg-cover bg-center opacity-80" 
             style={{ backgroundImage: "url('/hero-background.jpg')" }} // 例: /public/hero-background.jpg
           ></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-transparent"></div>
-          
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-purple-900/80 to-pink-900/70 animate-gradient"></div>
+         
           <div className="relative z-10 max-w-4xl mx-auto px-4">
             <AnimateOnScroll delay={100}>
               <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight uppercase">
