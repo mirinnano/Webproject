@@ -1,8 +1,23 @@
 'use client';
 
+// SEO と OGP のための Metadata をインポート
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import { AnimateOnScroll } from "@/components/animation/AnimateOnScroll";
 import { Users, Scale, Bomb } from "lucide-react";
+
+// --- [SEO改善点①] ページのメタデータを設定 ---
+// このページ専用のタイトルと説明文を設定します。
+export const metadata: Metadata = {
+  title: 'ロメダ論 | 私たちの理念',
+  description: 'Discordサーバー「ロメダ」の理念と哲学、設立経緯について。多様性の尊重、最大限の自由、破壊と創造を指針とする、はみ出し者たちのためのユートピアです。',
+  openGraph: {
+    title: 'ロメダ論 | 私たちの理念',
+    description: 'Discordサーバー「ロメダ」の理念と哲学、設立経緯について。',
+    // aboutページ固有のURLを指定
+    url: 'https://romeda.tokiwakano.uk/about',
+  },
+};
 
 export default function AboutPage() {
   const principles = [
@@ -30,12 +45,15 @@ export default function AboutPage() {
           <div className="absolute inset-0">
             <Image
               src="/hero-background.jpg"
-              alt="Background"
+              alt="ロメダの理念を象徴する抽象的な背景画像" // --- [SEO改善点②] altテキストを具体的に ---
               fill
               className="object-cover opacity-20"
+              priority // --- [SEO改善点②] LCPになりうる画像なのでpriorityを追加 ---
             />
           </div>
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            {/* --- [SEO改善点③] HTML構造の確認 --- */}
+            {/* h1はこのページで最も重要な見出し。このままで完璧です。 */}
             <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
               ロメダ論
             </h1>
@@ -51,6 +69,7 @@ export default function AboutPage() {
           
           <AnimateOnScroll>
             <div className="max-w-3xl mx-auto text-lg leading-8">
+              {/* h2はページの主要なセクションの見出し。適切です。 */}
               <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-3xl">
                 設立経緯
               </h2>
@@ -66,6 +85,7 @@ export default function AboutPage() {
           <div className="mt-20">
             <AnimateOnScroll>
               <div className="text-center">
+                {/* こちらもh2で問題ありません。 */}
                 <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-3xl">
                   行動指針
                 </h2>
@@ -84,6 +104,7 @@ export default function AboutPage() {
                       </div>
                     </div>
                     <div className="mt-6">
+                      {/* h3はh2セクション内の小見出し。これも適切です。 */}
                       <h3 className="text-xl font-bold text-gray-900 dark:text-white">{principle.title}</h3>
                       <p className="mt-4 text-base text-gray-600 dark:text-gray-400">
                         {principle.description}
