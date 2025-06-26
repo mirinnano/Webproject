@@ -1,4 +1,3 @@
-'use client';
 
 // SEO と OGP のための Metadata をインポート
 import type { Metadata } from 'next';

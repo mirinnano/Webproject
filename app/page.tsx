@@ -153,7 +153,7 @@ export default function HomePage() {
                 <iframe
                   width="100%"
                   height="100%"
-                  src="https://www.youtube.com/embed/あなたのYouTube動画ID"
+                  src="https://www.youtube.com/embed/jSE3XiTRrJk"
                   title="ロメダ紹介動画"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
